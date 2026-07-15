@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Bunny Solitaire</title>
+  <link id="favicon" rel="icon" href="data:," />
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+  <div id="sky" class="bg"></div>
+  <div id="sun" class="bg"></div>
+  <div id="clouds" class="bg"></div>
+  <div id="hills" class="bg"></div>
+  <div id="scenery" class="bg"></div>
+  <div id="meadow" class="bg"></div>
+  <div id="foreground" class="bg"></div>
+
+  <div id="app">
+    <header>
+      <h1><span id="logo-bunny" class="logo-bunny"></span><span class="wordmark">Bunny <span class="em">Solitaire</span></span></h1>
+      <div class="spacer"></div>
+      <div class="stat">⏱ <b id="timer">0:00</b></div>
+      <div class="stat">moves <b id="moves">0</b></div>
+      <div class="stat">🥕 <b id="progress">0/52</b></div>
+      <button class="btn" id="draw-mode" title="cards drawn from the stock">draw 1</button>
+      <button class="btn" id="undo">↶ undo</button>
+      <button class="btn hidden" id="auto">🏁 finish</button>
+      <button class="btn" id="scores" title="best times & fewest moves">🏆</button>
+      <button class="btn" id="sound">🔊</button>
+      <button class="btn" id="new-game">↻ new deal</button>
+    </header>
+
+    <div id="board">
+      <div id="top-row">
+        <div class="pile" id="stock" data-zone="stock"></div>
+        <div class="pile" id="waste" data-zone="waste"></div>
+        <div></div>
+        <div id="foundations"></div>
+      </div>
+      <div id="tableau"></div>
+    </div>
+  </div>
+
+  <div id="confetti"></div>
+
+  <div id="win" class="overlay hidden">
+    <div class="win-card">
+      <h2>You win! 🐰🎉</h2>
+      <p>Every bunny made it home.</p>
+      <div class="win-stats">
+        <div class="ws"><span class="ws-label">time</span><b id="win-time">0:00</b><em id="win-time-badge" class="badge hidden">★ best!</em></div>
+        <div class="ws"><span class="ws-label">moves</span><b id="win-moves">0</b><em id="win-moves-badge" class="badge hidden">★ best!</em></div>
+      </div>
+      <button class="btn primary" id="win-again">↻ play again</button>
+    </div>
+  </div>
+
+  <div id="scoreboard" class="overlay hidden">
+    <div class="win-card scores-card">
+      <h2>🏆 Meadow records</h2>
+      <div class="score-cols">
+        <div class="score-col">
+          <h3>⏱ Best times</h3>
+          <ol id="score-times"><li class="empty">no wins yet</li></ol>
+        </div>
+        <div class="score-col">
+          <h3>🥕 Fewest moves</h3>
+          <ol id="score-moves"><li class="empty">no wins yet</li></ol>
+        </div>
+      </div>
+      <button class="btn" id="scores-close">close</button>
+    </div>
+  </div>
+
+  <script src="js/engine.js"></script>
+  <script src="js/sprites.js"></script>
+  <script src="js/game.js"></script>
+</body>
+</html>
