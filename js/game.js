@@ -814,13 +814,21 @@ function fitCardWidth() {
 }
 
 let resizeTimer = null;
-window.addEventListener('resize', () => {
+function scheduleRefit() {
   clearTimeout(resizeTimer);
   resizeTimer = setTimeout(() => {
     fitCardWidth();
     state && render();
   }, 120);
-});
+}
+window.addEventListener('resize', scheduleRefit);
+// Belt-and-suspenders for phone rotation: some mobile browsers have been
+// historically inconsistent about firing a plain 'resize' on orientation
+// change (or fire it before the new dimensions are settled), so also listen
+// for 'orientationchange' directly, and again on visualViewport if present
+// (more reliable than window resize on iOS when the URL bar shows/hides).
+window.addEventListener('orientationchange', scheduleRefit);
+if (window.visualViewport) window.visualViewport.addEventListener('resize', scheduleRefit);
 
 // ── boot ──────────────────────────────────────────────────────────────────────
 fitCardWidth(); // before the first render, so fan offsets use the real card size
