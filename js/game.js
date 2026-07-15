@@ -784,15 +784,32 @@ $('#favicon').href = 'data:image/svg+xml,' + encodeURIComponent(faviconSVG());
 // on resize so rotating a phone or resizing a window keeps it exact, and
 // re-renders afterward since fan offsets/min-heights are baked into inline
 // px styles at render time.
+//
+// Width alone isn't enough: on landscape phones the viewport is wide but
+// short, so 7 columns fit easily at the max 78px card — but a 78px-wide
+// (110px-tall) card plus the header leaves no vertical room, clipping the
+// tableau with no hint that scrolling would help. So card size is also
+// capped by how much vertical space #board actually has, so the stock/
+// foundation row plus a usable peek of the tableau always fit on screen —
+// deeper stacks can still scroll inside #board, same as before.
 function fitCardWidth() {
   const cs = getComputedStyle(board);
   const padX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+  const padY = parseFloat(cs.paddingTop) + parseFloat(cs.paddingBottom);
   // Custom properties report their raw formula (e.g. "clamp(4px, 2vw, 22px)")
   // via getComputedStyle, not a resolved px value — read it off a real grid
   // property instead, which the browser does resolve.
   const gap = parseFloat(getComputedStyle(tableauEl).columnGap) || 0;
-  const available = board.clientWidth - padX;
-  const w = Math.max(34, Math.min(78, (available - 6 * gap) / 7));
+
+  const availableW = board.clientWidth - padX;
+  const widthCardW = (availableW - 6 * gap) / 7;
+
+  const availableH = board.clientHeight - padY;
+  // budget: 1 card-height for the top row + gap beneath it + a ~55% peek of
+  // the first tableau row, all as multiples of card height (card-h = card-w * 1.41)
+  const heightCardW = Math.max(0, (availableH - gap)) / (1.55 * 1.410);
+
+  const w = Math.max(34, Math.min(78, Math.min(widthCardW, heightCardW)));
   document.documentElement.style.setProperty('--card-w', `${w}px`);
 }
 
